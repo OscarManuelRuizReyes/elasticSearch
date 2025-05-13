@@ -63,9 +63,11 @@ def generate_visualizations():
         # Ajustes finales
         plt.tight_layout(pad=3.0)  # Añade padding general
         
-        # Guardar gráficos
+        # Verifica que la carpeta 'docs' existe
         output_dir = os.path.join(os.getcwd(), 'docs')
         os.makedirs(output_dir, exist_ok=True)
+        
+        # Guardar gráficos
         plt.savefig(os.path.join(output_dir, 'visualizations.png'), dpi=120, bbox_inches='tight')
         print(f"✅ Imagen guardada en: {os.path.abspath(os.path.join(output_dir, 'visualizations.png'))}")
         
