@@ -31,11 +31,11 @@ jobs:
     
     - name: Load data to Elasticsearch
       env:
-        ELASTIC_ID: ${{ secrets.ELASTIC_ID }}
+        ELASTIC_ID: ${{ secrets.ELASTIC_ID }}  # Use "localhost" if using local Elasticsearch
         ELASTIC_PASSWD: ${{ secrets.ELASTIC_PASSWD }}
       run: |
         echo "=== Debug: Environment Variables ==="
-        echo "Cloud ID length: ${#ELASTIC_ID}"
+        echo "Elastic ID length: ${#ELASTIC_ID}"
         echo "Password length: ${#ELASTIC_PASSWD}"
         
         if [ -z "$ELASTIC_ID" ]; then
