@@ -15,7 +15,7 @@ def load_data():
     )
 
     # Cargar datos y limpiar NaN
-    df = pd.read_csv("data/Titanic-Dataset.csv").fillna("")  # Reemplaza NaN con strings vacíos
+    df = pd.read_csv("data/dataset_obesidad_depresion.csv").fillna("")  # Reemplaza NaN con strings vacíos
     
     # Convertir a JSON y limpiar valores numéricos NaN
     records = []
