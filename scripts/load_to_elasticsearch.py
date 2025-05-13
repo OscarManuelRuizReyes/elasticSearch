@@ -4,14 +4,12 @@ import os
 import math
 
 def load_data():
-    # Usamos localhost para una instancia local de Elasticsearch
-    elastic_host = "http://localhost:9200"  # URL de Elasticsearch local
-    password = os.environ.get('ELASTIC_PASSWD')  # Contraseña del usuario elastic
+    cloud_id = os.environ.get('ELASTIC_ID')
+    password = os.environ.get('ELASTIC_PASSWD')
     
-    # Conectar a Elasticsearch local
     es = Elasticsearch(
-        elastic_host,
-        basic_auth=("elastic", password)  # Usuario 'elastic' y contraseña configurada
+        cloud_id=cloud_id,
+        basic_auth=("briceno", password)
     )
 
     # Cargar datos y limpiar NaN
