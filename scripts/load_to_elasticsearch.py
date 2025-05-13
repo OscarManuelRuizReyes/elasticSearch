@@ -4,12 +4,14 @@ import os
 import math
 
 def load_data():
-    cloud_id = os.environ.get('ELASTIC_ID')
-    password = os.environ.get('ELASTIC_PASSWD')
+    # Utiliza el cloud_id que has proporcionado
+    cloud_id = "Steam:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvJDM4YWRkMjYyYTI3MTQ1OWY4MDQ2M2QxNGNlN2MzYWQyJGY1MTMyYmFjNDVmMzQwMmZiNjg0OGEwYmNiYjFmMjFm"
+    password = os.environ.get('ELASTIC_PASSWD')  # Obtiene la contraseña del entorno
     
+    # Conexión a Elasticsearch usando el cloud_id
     es = Elasticsearch(
         cloud_id=cloud_id,
-        basic_auth=("briceno", password)
+        basic_auth=("elastic", password)  # Usuario 'elastic' y contraseña
     )
 
     # Cargar datos y limpiar NaN
