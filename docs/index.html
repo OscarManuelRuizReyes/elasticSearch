@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizaciones Titanic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Análisis de Datos del Titanic</h1>
+    
+    <div class="info">
+        <p>Visualizaciones generadas a partir de datos almacenados en Elasticsearch</p>
+    </div>
+    
+    <img src="visualizations.png" alt="Visualizaciones del Titanic">
+    
+    <div class="info">
+        <p>Última actualización: <span id="update-date"></span></p>
+    </div>
+
+    <script>
+        document.getElementById('update-date').textContent = new Date().toLocaleString();
+    </script>
+</body>
+</html>
