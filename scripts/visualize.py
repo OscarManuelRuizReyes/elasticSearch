@@ -4,12 +4,14 @@ import os
 from elasticsearch import Elasticsearch
 
 def generate_visualizations():
-    cloud_id = os.environ.get('ELASTIC_ID')
-    password = os.environ.get('ELASTIC_PASSWD')
+    # Usando el cloud_id proporcionado
+    cloud_id = "Steam:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvJDM4YWRkMjYyYTI3MTQ1OWY4MDQ2M2QxNGNlN2MzYWQyJGY1MTMyYmFjNDVmMzQwMmZiNjg0OGEwYmNiYjFmMjFm"
+    password = os.environ.get('ELASTIC_PASSWD')  # Obtiene la contraseña del entorno
     
+    # Conexión a Elasticsearch usando el cloud_id
     es = Elasticsearch(
         cloud_id=cloud_id,
-        basic_auth=("briceno", password)
+        basic_auth=("elastic", password)  # Usuario 'elastic' y la contraseña configurada
     )
     
     try:
