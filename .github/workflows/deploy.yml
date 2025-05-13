@@ -1,0 +1,79 @@
+name: Deploy Elasticsearch Visualizations
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'  # Run daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Load data to Elasticsearch
+      env:
+        ELASTIC_ID: ${{ secrets.ELASTIC_ID }}
+        ELASTIC_PASSWD: ${{ secrets.ELASTIC_PASSWD }}
+      run: |
+        echo "=== Debug: Environment Variables ==="
+        echo "Cloud ID length: ${#ELASTIC_ID}"
+        echo "Password length: ${#ELASTIC_PASSWD}"
+        
+        if [ -z "$ELASTIC_ID" ]; then
+          echo "::error::ELASTIC_ID is empty"
+          exit 1
+        fi
+    
+        if [ -z "$ELASTIC_PASSWD" ]; then
+          echo "::error::ELASTIC_PASSWD is empty"
+          exit 1
+        fi
+    
+        python scripts/load_to_elasticsearch.py
+    
+    - name: Generate visualizations
+      env:
+        ELASTIC_ID: ${{ secrets.ELASTIC_ID }}
+        ELASTIC_PASSWD: ${{ secrets.ELASTIC_PASSWD }}
+      run: |
+        python scripts/visualize.py
+        
+        # Verificación exhaustiva de los archivos generados
+        echo "=== Contenido de docs/ ==="
+        ls -la docs/
+        
+        if [ ! -f "docs/visualizations.png" ]; then
+          echo "::error::El archivo visualizations.png no fue creado"
+          exit 1
+        fi
+        
+        if [ ! -f "docs/index.html" ]; then
+          echo "::error::El archivo index.html no fue creado"
+          exit 1
+        fi
+    
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
+        keep_files: false
