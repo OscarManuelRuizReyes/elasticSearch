@@ -1,4 +1,5 @@
 import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 from elasticsearch import Elasticsearch
@@ -25,51 +26,53 @@ def generate_visualizations():
             
         df = pd.DataFrame([hit['_source'] for hit in hits])
         
-        # Limpieza de tipos de datos
-        df['Age'] = pd.to_numeric(df['Age'], errors='coerce')  # Convierte a float
-        df['Fare'] = pd.to_numeric(df['Fare'], errors='coerce')
-        df['Pclass'] = pd.to_numeric(df['Pclass'], errors='coerce')
-        df['Survived'] = pd.to_numeric(df['Survived'], errors='coerce')
+        # Asegurarse de que el orden de las categorías de obesidad esté correcto
+        obesidad_order = ['Normal', 'Sobrepeso', 'Obesidad grado 1', 'Obesidad mórbida']
+        df['Nivel de Obesidad'] = pd.Categorical(df['Nivel de Obesidad'], categories=obesidad_order, ordered=True)
         
-        # Eliminar filas con valores faltantes críticos
-        df = df.dropna(subset=['Age', 'Pclass', 'Survived'])
-        
-        print("Datos limpios:")
-        print(df.dtypes)  # Verifica los tipos de datos
-        
-        # Configuración mejorada para las gráficas
-        plt.figure(figsize=(14, 6))  # Aumenta el ancho total
-        plt.subplots_adjust(wspace=0.4, hspace=0.6)  # Ajusta espacios horizontales y verticales
-        
-        # Gráfico 1: Supervivencia por clase (izquierda)
-        plt.subplot(1, 2, 1)  # 1 fila, 2 columnas, posición 1
-        df.groupby(['Pclass', 'Survived']).size().unstack().plot(
-            kind='bar',
-            stacked=True,
-            color=['#ff9999','#66b3ff']  # Colores personalizados
-        )
-        plt.title('Supervivencia por Clase', pad=20)  # pad añade espacio al título
-        plt.xlabel('Clase')
-        plt.ylabel('Cantidad')
-        plt.legend(['No Sobrevivió', 'Sobrevivió'], bbox_to_anchor=(1.05, 1))  # Leyenda fuera del gráfico
-        
-        # Gráfico 2: Distribución de edades (derecha)
-        plt.subplot(1, 2, 2)  # 1 fila, 2 columnas, posición 2
-        df['Age'].hist(bins=20, color='#99ff99', edgecolor='black')
-        plt.title('Distribución de Edades', pad=20)
-        plt.xlabel('Edad')
-        plt.ylabel('Frecuencia')
+        # Gráfico 1: Relación entre el peso y el nivel de depresión
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(x='Peso', y='Nivel de Depresión', data=df, hue='Nivel de Obesidad', palette='coolwarm', s=100, alpha=0.6)
+        plt.title('Relación entre el Peso y el Nivel de Depresión')
+        plt.xlabel('Peso (kg)')
+        plt.ylabel('Nivel de Depresión')
+        plt.legend(title='Nivel de Obesidad', loc='upper left')
+        plt.tight_layout()
+        plt.savefig('docs/visualizations.png')
+        plt.show()
 
-        # Ajustes finales
-        plt.tight_layout(pad=3.0)  # Añade padding general
-        
-        # Verifica que la carpeta 'docs' existe
+        # Gráfico 2: Distribución del nivel de depresión por nivel de obesidad
+        plt.figure(figsize=(10, 6))
+        sns.boxplot(x='Nivel de Obesidad', y='Nivel de Depresión', data=df, palette='Set2')
+        plt.title('Nivel de Depresión por Nivel de Obesidad')
+        plt.xlabel('Nivel de Obesidad')
+        plt.ylabel('Nivel de Depresión')
+        plt.tight_layout()
+        plt.show()
+
+        # Gráfico 3: Relación entre horas de sueño y nivel de obesidad
+        plt.figure(figsize=(10, 6))
+        sns.boxplot(x='Nivel de Obesidad', y='Horas de Sueño', data=df, palette='Set3')
+        plt.title('Relación entre Horas de Sueño y Nivel de Obesidad')
+        plt.xlabel('Nivel de Obesidad')
+        plt.ylabel('Horas de Sueño')
+        plt.tight_layout()
+        plt.show()
+
+        # Gráfico 4: Actividad física según nivel de obesidad
+        plt.figure(figsize=(10, 6))
+        sns.countplot(x='Nivel de Obesidad', hue='Actividad Física', data=df, palette='Pastel1')
+        plt.title('Actividad Física según Nivel de Obesidad')
+        plt.xlabel('Nivel de Obesidad')
+        plt.ylabel('Número de Personas')
+        plt.tight_layout()
+        plt.show()
+
+        # Guardar gráficos en docs/
         output_dir = os.path.join(os.getcwd(), 'docs')
         os.makedirs(output_dir, exist_ok=True)
-        
-        # Guardar gráficos
-        plt.savefig(os.path.join(output_dir, 'visualizations.png'), dpi=120, bbox_inches='tight')
-        print(f"✅ Imagen guardada en: {os.path.abspath(os.path.join(output_dir, 'visualizations.png'))}")
+
+        print(f"✅ Visualizaciones generadas y guardadas en {output_dir}/visualizations.png")
         
     except Exception as e:
         print(f"❌ Error: {str(e)}")
