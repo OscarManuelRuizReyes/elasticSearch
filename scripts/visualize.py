@@ -1,5 +1,4 @@
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 import os
 from elasticsearch import Elasticsearch
@@ -30,41 +29,53 @@ def generate_visualizations():
         obesidad_order = ['Normal', 'Sobrepeso', 'Obesidad grado 1', 'Obesidad mórbida']
         df['Nivel de Obesidad'] = pd.Categorical(df['Nivel de Obesidad'], categories=obesidad_order, ordered=True)
         
-        # Gráfico 1: Relación entre el peso y el nivel de depresión
+        # Gráfico 1: Relación entre el peso y el nivel de depresión (scatter plot)
         plt.figure(figsize=(10, 6))
-        sns.scatterplot(x='Peso', y='Nivel de Depresión', data=df, hue='Nivel de Obesidad', palette='coolwarm', s=100, alpha=0.6)
+        for obesidad_level in obesidad_order:
+            subset = df[df['Nivel de Obesidad'] == obesidad_level]
+            plt.scatter(subset['Peso'], subset['Nivel de Depresión'], label=obesidad_level, alpha=0.6)
+        
         plt.title('Relación entre el Peso y el Nivel de Depresión')
         plt.xlabel('Peso (kg)')
         plt.ylabel('Nivel de Depresión')
-        plt.legend(title='Nivel de Obesidad', loc='upper left')
+        plt.legend(title='Nivel de Obesidad')
         plt.tight_layout()
         plt.savefig('docs/visualizations.png')
         plt.show()
 
-        # Gráfico 2: Distribución del nivel de depresión por nivel de obesidad
+        # Gráfico 2: Distribución del nivel de depresión por nivel de obesidad (boxplot)
         plt.figure(figsize=(10, 6))
-        sns.boxplot(x='Nivel de Obesidad', y='Nivel de Depresión', data=df, palette='Set2')
+        df.boxplot(column='Nivel de Depresión', by='Nivel de Obesidad', grid=False, patch_artist=True,
+                   boxprops=dict(facecolor='lightblue'), whiskerprops=dict(color='green'),
+                   capprops=dict(color='red'), medianprops=dict(color='blue'))
         plt.title('Nivel de Depresión por Nivel de Obesidad')
+        plt.suptitle('')  # Eliminar título extra
         plt.xlabel('Nivel de Obesidad')
         plt.ylabel('Nivel de Depresión')
         plt.tight_layout()
         plt.show()
 
-        # Gráfico 3: Relación entre horas de sueño y nivel de obesidad
+        # Gráfico 3: Relación entre horas de sueño y nivel de obesidad (boxplot)
         plt.figure(figsize=(10, 6))
-        sns.boxplot(x='Nivel de Obesidad', y='Horas de Sueño', data=df, palette='Set3')
+        df.boxplot(column='Horas de Sueño', by='Nivel de Obesidad', grid=False, patch_artist=True,
+                   boxprops=dict(facecolor='lightgreen'), whiskerprops=dict(color='orange'),
+                   capprops=dict(color='purple'), medianprops=dict(color='black'))
         plt.title('Relación entre Horas de Sueño y Nivel de Obesidad')
+        plt.suptitle('')  # Eliminar título extra
         plt.xlabel('Nivel de Obesidad')
         plt.ylabel('Horas de Sueño')
         plt.tight_layout()
         plt.show()
 
-        # Gráfico 4: Actividad física según nivel de obesidad
-        plt.figure(figsize=(10, 6))
-        sns.countplot(x='Nivel de Obesidad', hue='Actividad Física', data=df, palette='Pastel1')
+        # Gráfico 4: Actividad física según nivel de obesidad (bar chart)
+        activity_levels = df['Actividad Física'].unique()
+        activity_counts = df.groupby(['Nivel de Obesidad', 'Actividad Física']).size().unstack().fillna(0)
+        
+        activity_counts.plot(kind='bar', stacked=True, figsize=(12, 7), color=['#ff9999', '#66b3ff', '#99ff99'])
         plt.title('Actividad Física según Nivel de Obesidad')
         plt.xlabel('Nivel de Obesidad')
         plt.ylabel('Número de Personas')
+        plt.legend(title='Actividad Física', loc='upper left')
         plt.tight_layout()
         plt.show()
 
