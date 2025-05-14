@@ -3,48 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizaciones Titanic</title>
+    <title>Visualizaciones de Obesidad y Depresión</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
         h1 {
-            color: #333;
+            color: #2c3e50;
             text-align: center;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 20px auto;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            font-size: 36px;
         }
         .info {
             background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
             margin: 20px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .info p {
+            font-size: 18px;
+            color: #555;
+        }
+        .chart-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+        .chart-container img {
+            width: 45%;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #aaa;
         }
     </style>
 </head>
 <body>
-    <h1>Análisis de Datos del Titanic</h1>
-    
+
+    <h1>Visualizaciones de Obesidad y Depresión</h1>
+
     <div class="info">
-        <p>Visualizaciones generadas a partir de datos almacenados en Elasticsearch</p>
+        <p>Las visualizaciones se generaron utilizando datos de obesidad, depresión, y otros factores relacionados almacenados en Elasticsearch.</p>
     </div>
-    
-    <img src="visualizations.png" alt="Visualizaciones del Titanic">
-    
-    <div class="info">
+
+    <div class="chart-container">
+        <img src="visualization1.png" alt="Relación entre Peso y Nivel de Depresión">
+        <img src="visualization2.png" alt="Nivel de Depresión por Nivel de Obesidad">
+        <img src="visualization3.png" alt="Relación entre Horas de Sueño y Nivel de Obesidad">
+        <img src="visualization4.png" alt="Actividad Física según Nivel de Obesidad">
+    </div>
+
+    <div class="footer">
         <p>Última actualización: <span id="update-date"></span></p>
     </div>
 
     <script>
         document.getElementById('update-date').textContent = new Date().toLocaleString();
     </script>
+
 </body>
 </html>
