@@ -40,10 +40,10 @@ def generate_visualizations():
         plt.ylabel('Nivel de Depresión')
         plt.legend(title='Nivel de Obesidad')
         plt.tight_layout()
-        plt.savefig('docs/visualizations.png')
+        plt.savefig('docs/visualization1.png')  # Guardar la primera visualización
         plt.show()
 
-        # Gráfico 2: Distribución del nivel de depresión por nivel de obesidad (boxplot)
+        # Gráfico 2: Distribución del nivel de depresión por nivel de obesidad
         plt.figure(figsize=(10, 6))
         df.boxplot(column='Nivel de Depresión', by='Nivel de Obesidad', grid=False, patch_artist=True,
                    boxprops=dict(facecolor='lightblue'), whiskerprops=dict(color='green'),
@@ -53,9 +53,10 @@ def generate_visualizations():
         plt.xlabel('Nivel de Obesidad')
         plt.ylabel('Nivel de Depresión')
         plt.tight_layout()
+        plt.savefig('docs/visualization2.png')  # Guardar la segunda visualización
         plt.show()
 
-        # Gráfico 3: Relación entre horas de sueño y nivel de obesidad (boxplot)
+        # Gráfico 3: Relación entre horas de sueño y nivel de obesidad
         plt.figure(figsize=(10, 6))
         df.boxplot(column='Horas de Sueño', by='Nivel de Obesidad', grid=False, patch_artist=True,
                    boxprops=dict(facecolor='lightgreen'), whiskerprops=dict(color='orange'),
@@ -65,9 +66,11 @@ def generate_visualizations():
         plt.xlabel('Nivel de Obesidad')
         plt.ylabel('Horas de Sueño')
         plt.tight_layout()
+        plt.savefig('docs/visualization3.png')  # Guardar la tercera visualización
         plt.show()
 
-        # Gráfico 4: Actividad física según nivel de obesidad (bar chart)
+        # Gráfico 4: Actividad física según nivel de obesidad
+        plt.figure(figsize=(10, 6))
         activity_levels = df['Actividad Física'].unique()
         activity_counts = df.groupby(['Nivel de Obesidad', 'Actividad Física']).size().unstack().fillna(0)
         
@@ -75,15 +78,15 @@ def generate_visualizations():
         plt.title('Actividad Física según Nivel de Obesidad')
         plt.xlabel('Nivel de Obesidad')
         plt.ylabel('Número de Personas')
-        plt.legend(title='Actividad Física', loc='upper left')
         plt.tight_layout()
+        plt.savefig('docs/visualization4.png')  # Guardar la cuarta visualización
         plt.show()
 
         # Guardar gráficos en docs/
         output_dir = os.path.join(os.getcwd(), 'docs')
         os.makedirs(output_dir, exist_ok=True)
 
-        print(f"✅ Visualizaciones generadas y guardadas en {output_dir}/visualizations.png")
+        print(f"✅ Visualizaciones generadas y guardadas en {output_dir}/")
         
     except Exception as e:
         print(f"❌ Error: {str(e)}")
